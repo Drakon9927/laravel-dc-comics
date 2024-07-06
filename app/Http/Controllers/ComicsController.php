@@ -27,12 +27,25 @@ class ComicsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+
+public function store(Request $request)
 {
-    // visualizza i dati inviati
+
     dump($request->all());
 
-    
+    //inserire i dati nel database
+    $comic = new Comic();
+    $comic->title = $request->title;
+    $comic->description = $request->description;
+    $comic->thumb = $request->thumb;
+    $comic->price = $request->price;
+    $comic->series = $request->series;
+    $comic->sale_date = $request->sale_date;
+    $comic->type = $request->type;
+    $comic->save();
+
+    // Dopo aver salvato i dati, reindirizza l'utente a una pagina appropriata, per esempio la lista dei fumetti
+    return redirect()->route('comics.index'); 
 }
 
     /**
