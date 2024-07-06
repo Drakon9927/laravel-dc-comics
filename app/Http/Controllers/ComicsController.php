@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Comic;
 
-class ComicController extends Controller
+class ComicsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,16 +21,19 @@ class ComicController extends Controller
      */
     public function create()
     {
-        //
+        return view('comics.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
+{
+    // visualizza i dati inviati
+    dump($request->all());
+
+    
+}
 
     /**
      * Display the specified resource.
