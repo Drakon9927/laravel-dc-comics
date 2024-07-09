@@ -26,32 +26,28 @@ class ComicsController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * Include validation to ensure data integrity.
      */
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'thumb' => 'required|url',
+            'price' => 'required|numeric',
+            'series' => 'required|max:255',
+            'sale_date' => 'required|date',
+            'type' => 'required|max:255'
+        ]);
 
-public function store(Request $request)
-{
-
-    dump($request->all());
-
-    //inserire i dati nel database
-    $comic = new Comic();
-    $comic->title = $request->title;
-    $comic->description = $request->description;
-    $comic->thumb = $request->thumb;
-    $comic->price = $request->price;
-    $comic->series = $request->series;
-    $comic->sale_date = $request->sale_date;
-    $comic->type = $request->type;
-    $comic->save();
-
-    // Dopo aver salvato i dati, reindirizza l'utente a una pagina appropriata, per esempio la lista dei fumetti
-    return redirect()->route('comics.index'); 
-}
+        Comic::create($validatedData);
+        return redirect()->route('comics.index')->with('success', 'Comic added successfully');
+    }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         $comic = Comic::findOrFail($id);  // Trova il fumetto o genera un errore 404
         return view('comics.show', compact('comic'));  // Passa il fumetto alla vista
@@ -60,24 +56,41 @@ public function store(Request $request)
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $comic = Comic::findOrFail($id);
+        return view('comics.edit', compact('comic'));
     }
 
     /**
      * Update the specified resource in storage.
+     * Also include validation.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'thumb' => 'required|url',
+            'price' => 'required|numeric',
+            'series' => 'required|max:255',
+            'sale_date' => 'required|date',
+            'type' => 'required|max:255'
+        ]);
+
+        $comic = Comic::findOrFail($id);
+        $comic->update($validatedData);
+        return redirect()->route('comics.index')->with('success', 'Comic updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $comic = Comic::findOrFail($id);
+        $comic->delete();
+
+        return redirect()->route('comics.index')->with('success', 'Comic deleted successfully');
     }
 }

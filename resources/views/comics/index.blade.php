@@ -12,6 +12,11 @@
                             <h5 class="card-title">{{ $comic->title }}</h5>
                             <p class="card-text">{{ $comic->description }}</p>
                             <a href="{{ route('comics.show', $comic->id) }}" class="btn btn-primary">Dettagli</a>
+                            <form action="{{ route('comics.destroy', $comic->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit">Delete</button>
+                            </form>
                         </div>
                     </div>
                 </div>
